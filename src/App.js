@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -12,6 +14,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 const App = () => {
     const [todo, setTodo] = useState({description: '', date: '', status:''});
     const [todos, setTodos] = useState([]);
+    const [value, setValue] = useState('one');
 
     const inputChanged = (event) => {
       setTodo({...todo, [event.target.name]: event.target.value});
@@ -41,6 +44,10 @@ const App = () => {
         cellStyle: params=> params.value===   "High"? {color: 'red'} : {color:'black'}
       }
     ]
+
+    const handleChange = (event, value) => {
+      setValue(value);
+    }
   
     return (
         <div className="App">
@@ -49,9 +56,17 @@ const App = () => {
               <Typography variant="h6">
                 To-do List
               </Typography>
+              <Tabs value={value} onChange={handleChange}>
+                <Tab value="one" label="Home" />
+                <Tab value="two" label="My to-dos" />
+              </Tabs>
             </Toolbar>
           </AppBar>
-
+          {value === 'one' && <div>
+            <center><h2>Welcome!</h2>
+            <div>Here you can find the To-do List.</div></center>
+            </div>}
+          {value === 'two' && <div>
           <center>
           <TextField style={{margin: 5}} label="Description" name="description" value={todo.description} onChange={inputChanged} />
           <TextField style={{margin: 5}} label="Date" name="date" value={todo.date} onChange={inputChanged} />
@@ -84,6 +99,7 @@ const App = () => {
             
             </div>
             </center>
+            </div>}
         </div>
     );
 }
