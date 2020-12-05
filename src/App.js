@@ -7,6 +7,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  DatePicker,
+} from '@material-ui/pickers';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
@@ -25,7 +30,7 @@ const App = () => {
     const addTodo = (event) => {
       event.preventDefault();
       setTodos([...todos, todo]);
-      setTodo({description: '', date: '', status:''});
+      setTodo({description: '', status:''});
     }
 
     const deleteTodo = () => {
@@ -35,6 +40,10 @@ const App = () => {
       else {
         alert('Selectrowfirst');
       }
+    }
+
+    const handleDateChange = (date) => {
+      setTodo({...todo, date: date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear() })
     }
 
     const columns = [
@@ -66,10 +75,22 @@ const App = () => {
             <center><h2>Welcome!</h2>
             <div>Here you can find the To-do List.</div></center>
             </div>}
+
           {value === 'two' && <div>
           <center>
-          <TextField style={{margin: 5}} label="Description" name="description" value={todo.description} onChange={inputChanged} />
-          <TextField style={{margin: 5}} label="Date" name="date" value={todo.date} onChange={inputChanged} />
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <TextField style={{margin: 5}} label="Description" name="description" value={todo.description} onChange={inputChanged} />
+          
+
+            <DatePicker
+                style={{margin: 5}}
+                label="Date"
+                format="dd/MM/yyyy"
+                value={todo.date}
+                onChange={date => handleDateChange(date)} />
+          
+          </MuiPickersUtilsProvider>
+
           <TextField style={{margin: 5}} label="Status" name="status" value={todo.status} onChange={inputChanged} />
           <Button 
             size="small" 
